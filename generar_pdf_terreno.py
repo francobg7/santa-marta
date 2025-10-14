@@ -12,7 +12,7 @@ import os
 # === CONFIGURACIÓN ===
 pdf_name = "campo_santa_marta.pdf"
 doc = SimpleDocTemplate(pdf_name, pagesize=A4, 
-                       rightMargin=20, leftMargin=20, topMargin=20, bottomMargin=20)
+                       rightMargin=0, leftMargin=0, topMargin=0, bottomMargin=0)
 
 # === FUNCIONES AUXILIARES ===
 def crear_imagen_principal(ruta_imagen, ancho, alto):
@@ -57,7 +57,7 @@ def crear_galeria_carrusel():
     for img_principal in imagenes_principales:
         if os.path.exists(img_principal):
             # Imagen principal ocupando todo el ancho del PDF (A4 = 21cm)
-            galeria['imagen_principal'] = crear_imagen_principal(img_principal, 19*cm, 10*cm)
+            galeria['imagen_principal'] = crear_imagen_principal(img_principal, 21*cm, 12*cm)
             break
     
     # Buscar miniaturas (campo2.jpg a campo5.jpg) - MÁS GRANDES
@@ -70,8 +70,8 @@ def crear_galeria_carrusel():
     
     for ruta, titulo in miniaturas_info:
         if os.path.exists(ruta):
-            # Miniaturas más grandes (8x5 cm cada una) para mejor visualización
-            miniatura = crear_miniatura(ruta, 8*cm, 5*cm, titulo)
+            # Miniaturas mucho más grandes (10.5x6.5 cm cada una) para ocupar todo el ancho
+            miniatura = crear_miniatura(ruta, 10.5*cm, 6.5*cm, titulo)
             if miniatura:
                 galeria['miniaturas'].append(miniatura)
     
@@ -80,13 +80,13 @@ def crear_galeria_carrusel():
 # === ESTILOS SIMPLIFICADOS ===
 styles = getSampleStyleSheet()
 
-# Estilos personalizados más limpios
-styles.add(ParagraphStyle(name='TituloPrincipal', fontSize=24, leading=28, alignment=1, textColor=colors.white, spaceAfter=12))
-styles.add(ParagraphStyle(name='Subtitulo', fontSize=16, leading=20, alignment=1, textColor=colors.white, spaceAfter=8))
-styles.add(ParagraphStyle(name='InfoDestacada', fontSize=14, leading=18, alignment=1, textColor=colors.white, spaceAfter=6))
-styles.add(ParagraphStyle(name='Precio', fontSize=20, leading=24, alignment=1, textColor=colors.HexColor('#f39c12'), spaceAfter=12))
-styles.add(ParagraphStyle(name='Contacto', fontSize=12, leading=16, alignment=1, textColor=colors.white, spaceAfter=4))
-styles.add(ParagraphStyle(name='Enlaces', fontSize=10, leading=12, alignment=1, textColor=colors.HexColor('#3498db'), spaceAfter=6))
+# Estilos personalizados más grandes
+styles.add(ParagraphStyle(name='TituloPrincipal', fontSize=36, leading=42, alignment=1, textColor=colors.white, spaceAfter=20))
+styles.add(ParagraphStyle(name='Subtitulo', fontSize=24, leading=28, alignment=1, textColor=colors.white, spaceAfter=12))
+styles.add(ParagraphStyle(name='InfoDestacada', fontSize=20, leading=24, alignment=1, textColor=colors.white, spaceAfter=10))
+styles.add(ParagraphStyle(name='Precio', fontSize=28, leading=32, alignment=1, textColor=colors.HexColor('#f39c12'), spaceAfter=16))
+styles.add(ParagraphStyle(name='Contacto', fontSize=18, leading=22, alignment=1, textColor=colors.white, spaceAfter=8))
+styles.add(ParagraphStyle(name='Enlaces', fontSize=14, leading=18, alignment=1, textColor=colors.HexColor('#3498db'), spaceAfter=8))
 
 story = []
 
@@ -94,43 +94,44 @@ story = []
 
 # === INFORMACIÓN PRINCIPAL SOBRE FONDO ===
 # Título principal con overlay sobre la imagen
-titulo_principal = "CAMPO EN VENTA<br/><font size='16' color='#ecf0f1'>Santa Marta, Boquerón - Paraguay</font>"
+titulo_principal = "CAMPO EN VENTA<br/><font size='24' color='#ecf0f1'>Santa Marta, Boquerón - Paraguay</font>"
 
 # Información esencial del campo
 info_esencial = """
-<font size='14'><b>1.747 Has • Mixto (Agrícola + Ganadero)</b></font><br/>
-<font size='12'>Agrícolas: 191 Has • Ganaderas: 715 Has • Monte: 437 Has</font><br/>
-<font size='12'>Precipitación: 800 mm anuales</font>
+<font size='20'><b>1.747 Has • Mixto (Agrícola + Ganadero)</b></font><br/>
+<font size='18'>Agrícolas: 191 Has • Ganaderas: 715 Has • Monte: 437 Has</font><br/>
+<font size='18'>Precipitación: 800 mm anuales</font>
 """
 
 # Precio destacado
-precio_destacado = "CONSULTAR PRECIO<br/><font size='12'>Contactar para más información</font>"
+precio_destacado = "CONSULTAR PRECIO<br/><font size='18'>Contactar para más información</font>"
 
 # Contacto directo
 contacto_directo = """
-<font size='12'><b>CONTACTO DIRECTO</b></font><br/>
-<font size='11'>WhatsApp: +595 981 240 099</font><br/>
-<font size='10'>Disponible 24/7</font>
+<font size='18'><b>CONTACTO DIRECTO</b></font><br/>
+<font size='16'>WhatsApp: +595 981 240 099</font><br/>
+<font size='14'><b>Mauricio Granada</b></font><br/>
+<font size='14'>Disponible 24/7</font>
 """
 
 # === CREAR OVERLAY DE INFORMACIÓN ===
 # Crear tabla con información superpuesta
 overlay_data = [
     [Paragraph(titulo_principal, styles['TituloPrincipal'])],
-    [Spacer(1, 20)],
+    [Spacer(1, 30)],
     [Paragraph(info_esencial, styles['InfoDestacada'])],
-    [Spacer(1, 15)],
+    [Spacer(1, 25)],
     [Paragraph(precio_destacado, styles['Precio'])],
-    [Spacer(1, 20)],
+    [Spacer(1, 30)],
     [Paragraph(contacto_directo, styles['Contacto'])]
 ]
 
-overlay_table = Table(overlay_data, colWidths=[19*cm])
+overlay_table = Table(overlay_data, colWidths=[21*cm])
 overlay_table.setStyle(TableStyle([
     ('BACKGROUND', (0, 0), (-1, -1), colors.black),  # Fondo negro
     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
     ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-    ('PADDING', (0, 0), (-1, -1), 20),
+    ('PADDING', (0, 0), (-1, -1), 30),
     ('BOX', (0, 0), (-1, -1), 0, colors.black),
     ('ROWBACKGROUNDS', (0, 0), (-1, -1), [colors.black]),
 ]))
@@ -145,7 +146,7 @@ if galeria['imagen_principal']:
     
     # Overlay de información sobre la imagen
     story.append(overlay_table)
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 20))  # Reducir espacio antes de las miniaturas
     
     # Miniaturas en formato 2x2
     if galeria['miniaturas']:
@@ -168,8 +169,8 @@ if galeria['imagen_principal']:
                 fila2.append(Paragraph("", styles['Contacto']))
             miniaturas_data.append(fila2)
         
-        # Ajustar ancho de columnas para miniaturas más grandes (8cm cada una)
-        miniaturas_table = Table(miniaturas_data, colWidths=[8*cm, 8*cm])
+        # Ajustar ancho de columnas para miniaturas más grandes (10.5cm cada una)
+        miniaturas_table = Table(miniaturas_data, colWidths=[10.5*cm, 10.5*cm])
         miniaturas_table.setStyle(TableStyle([
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
@@ -178,60 +179,88 @@ if galeria['imagen_principal']:
         ]))
         
         story.append(miniaturas_table)
-        story.append(Spacer(1, 15))
+        story.append(Spacer(1, 20))  # Espacio después de las miniaturas
+        
+        # === PUNTOS DE INTERÉS EN PÁGINA 2 ===
+        puntos_interes_info = """
+        <font color='#ecf0f1' size='18'><b>PUNTOS DE INTERÉS</b></font><br/><br/>
+        <font color='#bdc3c7' size='16'>
+        • Ruta de la leche: 76km<br/>
+        • Neuland: 150km<br/>
+        • Filadelfia: 190km<br/>
+        • Mariscal Estigarribia: 250km<br/>
+        • Asunción: 500km
+        </font>
+        """
+        
+        # Crear tabla para puntos de interés que ocupe todo el ancho
+        puntos_interes_data = [
+            [Paragraph(puntos_interes_info, ParagraphStyle(name='PuntosInteres', fontSize=16, leading=20, alignment=0, textColor=colors.white))]
+        ]
+        
+        puntos_interes_table = Table(puntos_interes_data, colWidths=[21*cm])
+        puntos_interes_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.black),  # Fondo negro
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('PADDING', (0, 0), (-1, -1), 15),
+            ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#34495e')),  # Borde
+        ]))
+        
+        story.append(puntos_interes_table)
     
     # Enlaces de contacto
     whatsapp_link = "https://wa.me/595981240099?text=Hola%2C%20vi%20el%20campo%20en%20venta%20en%20Santa%20Marta%2C%20Boquerón"
     maps_link = "https://maps.google.com/?q=-23.2984734,-60.5146408"
     drive_link = "https://drive.google.com/drive/folders/1IQy8Cjl1nAqoKcUkeSIh0thIItwWwYWq?usp=drive_link"
     
-    # Enlaces con diseño limpio
+    # Enlaces con diseño limpio y subrayados
     enlaces_data = [
         [
-            Paragraph(f"<a href='{whatsapp_link}' color='white'><b>WhatsApp</b><br/>+595 981 240 099</a>", 
-                     ParagraphStyle(name='EnlaceBox', fontSize=12, leading=16, alignment=1, textColor=colors.white)),
-            Paragraph(f"<a href='{maps_link}' color='white'><b>Google Maps</b><br/>Ver ubicación</a>", 
-                     ParagraphStyle(name='EnlaceBox', fontSize=12, leading=16, alignment=1, textColor=colors.white)),
-            Paragraph(f"<a href='{drive_link}' color='white'><b>Google Drive</b><br/>Ver fotos</a>", 
-                     ParagraphStyle(name='EnlaceBox', fontSize=12, leading=16, alignment=1, textColor=colors.white))
+            Paragraph(f"<a href='{whatsapp_link}' color='white'><b>WhatsApp</b><br/><u>+595 981 240 099</u></a>", 
+                     ParagraphStyle(name='EnlaceBox', fontSize=18, leading=22, alignment=1, textColor=colors.white)),
+            Paragraph(f"<a href='{maps_link}' color='white'><b>Google Maps</b><br/><u>Ver ubicación</u></a>", 
+                     ParagraphStyle(name='EnlaceBox', fontSize=18, leading=22, alignment=1, textColor=colors.white)),
+            Paragraph(f"<a href='{drive_link}' color='white'><b>Google Drive</b><br/><u>Ver fotos</u></a>", 
+                     ParagraphStyle(name='EnlaceBox', fontSize=18, leading=22, alignment=1, textColor=colors.white))
         ]
     ]
     
-    enlaces_table = Table(enlaces_data, colWidths=[6.5*cm, 6.5*cm, 6.5*cm])
+    enlaces_table = Table(enlaces_data, colWidths=[7*cm, 7*cm, 7*cm])
     enlaces_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (0, 0), colors.black),  # Fondo negro WhatsApp
         ('BACKGROUND', (1, 0), (1, 0), colors.black),  # Fondo negro Google Maps
         ('BACKGROUND', (2, 0), (2, 0), colors.black),  # Fondo negro Google Drive
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('PADDING', (0, 0), (-1, -1), 15),
+        ('PADDING', (0, 0), (-1, -1), 10),
         ('BOX', (0, 0), (-1, -1), 2, colors.white),  # Borde blanco para contraste
     ]))
     
     story.append(enlaces_table)
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 10))
     
     # Información adicional sobre Google Drive
     drive_info = """
-    <font color='#ecf0f1'><b>GALERÍA COMPLETA EN GOOGLE DRIVE</b></font><br/>
-    <font color='#bdc3c7'>Accede a todas las fotos del campo en alta resolución</font>
+    <font color='#ecf0f1' size='18'><b>GALERÍA COMPLETA EN GOOGLE DRIVE</b></font><br/>
+    <font color='#7f8c8d' size='16'>Accede a todas las fotos del campo en alta resolución</font>
     """
     story.append(Paragraph(drive_info, styles['Enlaces']))
-    story.append(Spacer(1, 20))
+    story.append(Spacer(1, 30))
     
     # === INFORMACIÓN DETALLADA EN DOS COLUMNAS ===
     # Descripción (lado izquierdo)
     descripcion_info = """
-    <font color='#ecf0f1' size='14'><b>DESCRIPCIÓN</b></font><br/><br/>
-    <font color='#bdc3c7' size='11'>
-    Campo muy bien desarrollado ubicado en la zona de Santa Marta, Boquerón. El mismo es de 1.746 Has, de las cuales 715 son ganaderas de pastura Gatton Panic y 191 son agrícolas. Además, la propiedad cuenta con 154 Has que aún se pueden desarrollar y un excedente de 103 Has, sumando así 1.850 Has en total.
+    <font color='#ecf0f1' size='18'><b>DESCRIPCIÓN</b></font><br/><br/>
+    <font color='#bdc3c7' size='16'>
+    Campo muy bien desarrollado con 715 Has ganaderas de pastura Gatton Panic y con 191 agrícolas. Además, la propiedad cuenta con 154 Has que aún se pueden desarrollar y un excedente de 103 Has, sumando así 1.850 Has en total.
     </font>
     """
     
     # Infraestructura (lado derecho)
     infraestructura_info = """
-    <font color='#ecf0f1' size='14'><b>INFRAESTRUCTURA</b></font><br/><br/>
-    <font color='#bdc3c7' size='11'>
+    <font color='#ecf0f1' size='18'><b>INFRAESTRUCTURA</b></font><br/><br/>
+    <font color='#bdc3c7' size='16'>
     • Corriente eléctrica con generador.<br/>
     • Acceso al campo por 4 caminos, camino de tierra en buen estado a 76 km del asfalto de la ruta de la leche.<br/>
     • Potreros ganaderos subdivididos en 4 potreros con un bebedero en el medio, haciendo la ganadería más eficiente.<br/>
@@ -245,26 +274,36 @@ if galeria['imagen_principal']:
     # Crear tabla de dos columnas
     info_detallada_data = [
         [
-            Paragraph(descripcion_info, ParagraphStyle(name='InfoColumna', fontSize=11, leading=14, alignment=0, textColor=colors.white)),
-            Paragraph(infraestructura_info, ParagraphStyle(name='InfoColumna', fontSize=11, leading=14, alignment=0, textColor=colors.white))
+            Paragraph(descripcion_info, ParagraphStyle(name='InfoColumna', fontSize=16, leading=20, alignment=0, textColor=colors.white)),
+            Paragraph(infraestructura_info, ParagraphStyle(name='InfoColumna', fontSize=16, leading=20, alignment=0, textColor=colors.white))
         ]
     ]
     
-    info_detallada_table = Table(info_detallada_data, colWidths=[9.5*cm, 9.5*cm])
+    info_detallada_table = Table(info_detallada_data, colWidths=[10.5*cm, 10.5*cm])
     info_detallada_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (0, 0), colors.HexColor('#1a1a1a')),  # Fondo oscuro para descripción
-        ('BACKGROUND', (1, 0), (1, 0), colors.HexColor('#1a1a1a')),  # Fondo oscuro para infraestructura
+        ('BACKGROUND', (0, 0), (0, 0), colors.black),  # Fondo negro para descripción (mismo que overlay)
+        ('BACKGROUND', (1, 0), (1, 0), colors.black),  # Fondo negro para infraestructura (mismo que overlay)
         ('ALIGN', (0, 0), (0, 0), 'LEFT'),
         ('ALIGN', (1, 0), (1, 0), 'LEFT'),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('PADDING', (0, 0), (-1, -1), 15),
+        ('PADDING', (0, 0), (-1, -1), 10),
         ('BOX', (0, 0), (0, 0), 1, colors.HexColor('#34495e')),  # Borde izquierdo
         ('BOX', (1, 0), (1, 0), 1, colors.HexColor('#34495e')),  # Borde derecho
         ('LINEAFTER', (0, 0), (0, 0), 1, colors.HexColor('#34495e')),  # Línea divisoria
     ]))
     
     story.append(info_detallada_table)
-    story.append(Spacer(1, 20))
+    
+    # === FONDO NEGRO HASTA EL FINAL DE LA PÁGINA ===
+    # Agregar espacio adicional para llenar la página y forzar las miniaturas a la página 2
+    espacio_adicional = 12*cm  # Reducir espacio para evitar página 4
+    fondo_final_data = [[Paragraph("", ParagraphStyle(name='FondoFinal', fontSize=1))]]
+    fondo_final_table = Table(fondo_final_data, colWidths=[21*cm], rowHeights=[espacio_adicional])
+    fondo_final_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), colors.black),
+        ('BOX', (0, 0), (-1, -1), 0, colors.black),
+    ]))
+    story.append(fondo_final_table)
     
 else:
     # Si no hay imagen principal, mostrar información básica
