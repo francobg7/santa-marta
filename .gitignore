@@ -38,11 +38,11 @@ wheels/
 *.log
 
 # PDFs generados (opcional - puedes quitar esta línea si quieres subir los PDFs)
-*.pdf
+campo_santa_marta.pdf
 
 # Imágenes de ejemplo (opcional - puedes quitar esta línea si quieres subir las imágenes)
-campo*.pdf
-terreno_en_venta.pdf
+# campo*.pdf
+# terreno_en_venta.pdf
 
 # Archivos de sistema
 Thumbs.db
