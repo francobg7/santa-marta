@@ -11,8 +11,7 @@ import os
 
 # === CONFIGURACIÓN ===
 pdf_name = "campo_santa_marta.pdf"
-doc = SimpleDocTemplate(pdf_name, pagesize=A4, 
-                       rightMargin=20, leftMargin=20, topMargin=20, bottomMargin=20)
+doc = SimpleDocTemplate(pdf_name, pagesize=A4)
 
 # === FUNCIONES AUXILIARES ===
 def crear_imagen_principal(ruta_imagen, ancho, alto):
@@ -35,16 +34,6 @@ def crear_miniatura(ruta_imagen, ancho, alto, titulo):
     except:
         return None
 
-def crear_fondo_negro():
-    """Crear fondo negro para el PDF usando tabla"""
-    fondo_data = [[Paragraph("", ParagraphStyle(name='Fondo', fontSize=1))]]
-    fondo_table = Table(fondo_data, colWidths=[19*cm], rowHeights=[27*cm])
-    fondo_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, -1), colors.black),
-        ('BOX', (0, 0), (-1, -1), 0, colors.black),
-    ]))
-    return fondo_table
-
 def crear_galeria_carrusel():
     """Crear galería tipo carrusel con imagen principal y miniaturas"""
     galeria = {
@@ -57,7 +46,7 @@ def crear_galeria_carrusel():
     for img_principal in imagenes_principales:
         if os.path.exists(img_principal):
             # Imagen principal ocupando todo el ancho del PDF (A4 = 21cm)
-            galeria['imagen_principal'] = crear_imagen_principal(img_principal, 19*cm, 10*cm)
+            galeria['imagen_principal'] = crear_imagen_principal(img_principal, 20*cm, 12*cm)
             break
     
     # Buscar miniaturas (campo2.jpg a campo5.jpg) - MÁS GRANDES
@@ -70,8 +59,8 @@ def crear_galeria_carrusel():
     
     for ruta, titulo in miniaturas_info:
         if os.path.exists(ruta):
-            # Miniaturas más grandes (8x5 cm cada una) para mejor visualización
-            miniatura = crear_miniatura(ruta, 8*cm, 5*cm, titulo)
+            # Miniaturas más grandes (5x3 cm cada una)
+            miniatura = crear_miniatura(ruta, 5*cm, 3*cm, titulo)
             if miniatura:
                 galeria['miniaturas'].append(miniatura)
     
@@ -89,8 +78,6 @@ styles.add(ParagraphStyle(name='Contacto', fontSize=12, leading=16, alignment=1,
 styles.add(ParagraphStyle(name='Enlaces', fontSize=10, leading=12, alignment=1, textColor=colors.HexColor('#3498db'), spaceAfter=6))
 
 story = []
-
-# === INICIO DIRECTO CON CONTENIDO ===
 
 # === INFORMACIÓN PRINCIPAL SOBRE FONDO ===
 # Título principal con overlay sobre la imagen
@@ -125,14 +112,13 @@ overlay_data = [
     [Paragraph(contacto_directo, styles['Contacto'])]
 ]
 
-overlay_table = Table(overlay_data, colWidths=[19*cm])
+overlay_table = Table(overlay_data, colWidths=[20*cm])
 overlay_table.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (-1, -1), colors.black),  # Fondo negro
+    ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#2c3e50')),
     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
     ('VALIGN', (0, 0), (-1, -1), 'TOP'),
     ('PADDING', (0, 0), (-1, -1), 20),
-    ('BOX', (0, 0), (-1, -1), 0, colors.black),
-    ('ROWBACKGROUNDS', (0, 0), (-1, -1), [colors.black]),
+    ('BOX', (0, 0), (-1, -1), 0, colors.HexColor('#2c3e50')),
 ]))
 
 # === GALERÍA DE IMÁGENES ===
@@ -147,34 +133,21 @@ if galeria['imagen_principal']:
     story.append(overlay_table)
     story.append(Spacer(1, 20))
     
-    # Miniaturas en formato 2x2
+    # Miniaturas
     if galeria['miniaturas']:
-        # Crear tabla para miniaturas en formato 2x2
+        # Crear tabla para miniaturas
         miniaturas_data = []
+        for i in range(0, len(galeria['miniaturas']), 4):
+            fila = galeria['miniaturas'][i:i+4]
+            while len(fila) < 4:
+                fila.append(Paragraph("", styles['Contacto']))
+            miniaturas_data.append(fila)
         
-        # Primera fila: primeras 2 imágenes
-        if len(galeria['miniaturas']) >= 2:
-            fila1 = galeria['miniaturas'][0:2]
-            # Rellenar con espacio vacío si solo hay 1 imagen
-            while len(fila1) < 2:
-                fila1.append(Paragraph("", styles['Contacto']))
-            miniaturas_data.append(fila1)
-        
-        # Segunda fila: siguientes 2 imágenes
-        if len(galeria['miniaturas']) >= 3:
-            fila2 = galeria['miniaturas'][2:4]
-            # Rellenar con espacio vacío si no hay suficientes imágenes
-            while len(fila2) < 2:
-                fila2.append(Paragraph("", styles['Contacto']))
-            miniaturas_data.append(fila2)
-        
-        # Ajustar ancho de columnas para miniaturas más grandes (8cm cada una)
-        miniaturas_table = Table(miniaturas_data, colWidths=[8*cm, 8*cm])
+        miniaturas_table = Table(miniaturas_data, colWidths=[5*cm, 5*cm, 5*cm, 5*cm])
         miniaturas_table.setStyle(TableStyle([
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('PADDING', (0, 0), (-1, -1), 5),
-            ('SPACEAFTER', (0, 0), (-1, -1), 10),  # Espacio entre filas
+            ('PADDING', (0, 0), (-1, -1), 3),
         ]))
         
         story.append(miniaturas_table)
@@ -199,13 +172,13 @@ if galeria['imagen_principal']:
     
     enlaces_table = Table(enlaces_data, colWidths=[6.5*cm, 6.5*cm, 6.5*cm])
     enlaces_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (0, 0), colors.black),  # Fondo negro WhatsApp
-        ('BACKGROUND', (1, 0), (1, 0), colors.black),  # Fondo negro Google Maps
-        ('BACKGROUND', (2, 0), (2, 0), colors.black),  # Fondo negro Google Drive
+        ('BACKGROUND', (0, 0), (0, 0), colors.HexColor('#25d366')),  # Verde WhatsApp
+        ('BACKGROUND', (1, 0), (1, 0), colors.HexColor('#4285f4')),  # Azul Google
+        ('BACKGROUND', (2, 0), (2, 0), colors.HexColor('#ff6b6b')),  # Rojo Google Drive
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('PADDING', (0, 0), (-1, -1), 15),
-        ('BOX', (0, 0), (-1, -1), 2, colors.white),  # Borde blanco para contraste
+        ('BOX', (0, 0), (-1, -1), 0, colors.white),
     ]))
     
     story.append(enlaces_table)
@@ -213,58 +186,10 @@ if galeria['imagen_principal']:
     
     # Información adicional sobre Google Drive
     drive_info = """
-    <font color='#ecf0f1'><b>GALERÍA COMPLETA EN GOOGLE DRIVE</b></font><br/>
-    <font color='#bdc3c7'>Accede a todas las fotos del campo en alta resolución</font>
+    <font color='#2c3e50'><b>GALERÍA COMPLETA EN GOOGLE DRIVE</b></font><br/>
+    <font color='#7f8c8d'>Accede a todas las fotos del campo en alta resolución</font>
     """
     story.append(Paragraph(drive_info, styles['Enlaces']))
-    story.append(Spacer(1, 20))
-    
-    # === INFORMACIÓN DETALLADA EN DOS COLUMNAS ===
-    # Descripción (lado izquierdo)
-    descripcion_info = """
-    <font color='#ecf0f1' size='14'><b>DESCRIPCIÓN</b></font><br/><br/>
-    <font color='#bdc3c7' size='11'>
-    Campo muy bien desarrollado ubicado en la zona de Santa Marta, Boquerón. El mismo es de 1.746 Has, de las cuales 715 son ganaderas de pastura Gatton Panic y 191 son agrícolas. Además, la propiedad cuenta con 154 Has que aún se pueden desarrollar y un excedente de 103 Has, sumando así 1.850 Has en total.
-    </font>
-    """
-    
-    # Infraestructura (lado derecho)
-    infraestructura_info = """
-    <font color='#ecf0f1' size='14'><b>INFRAESTRUCTURA</b></font><br/><br/>
-    <font color='#bdc3c7' size='11'>
-    • Corriente eléctrica con generador.<br/>
-    • Acceso al campo por 4 caminos, camino de tierra en buen estado a 76 km del asfalto de la ruta de la leche.<br/>
-    • Potreros ganaderos subdivididos en 4 potreros con un bebedero en el medio, haciendo la ganadería más eficiente.<br/>
-    • 7 tanques australianos.<br/>
-    • 1 manga.<br/>
-    • 1 casa principal.<br/>
-    • 1 casa de peón.
-    </font>
-    """
-    
-    # Crear tabla de dos columnas
-    info_detallada_data = [
-        [
-            Paragraph(descripcion_info, ParagraphStyle(name='InfoColumna', fontSize=11, leading=14, alignment=0, textColor=colors.white)),
-            Paragraph(infraestructura_info, ParagraphStyle(name='InfoColumna', fontSize=11, leading=14, alignment=0, textColor=colors.white))
-        ]
-    ]
-    
-    info_detallada_table = Table(info_detallada_data, colWidths=[9.5*cm, 9.5*cm])
-    info_detallada_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (0, 0), colors.HexColor('#1a1a1a')),  # Fondo oscuro para descripción
-        ('BACKGROUND', (1, 0), (1, 0), colors.HexColor('#1a1a1a')),  # Fondo oscuro para infraestructura
-        ('ALIGN', (0, 0), (0, 0), 'LEFT'),
-        ('ALIGN', (1, 0), (1, 0), 'LEFT'),
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('PADDING', (0, 0), (-1, -1), 15),
-        ('BOX', (0, 0), (0, 0), 1, colors.HexColor('#34495e')),  # Borde izquierdo
-        ('BOX', (1, 0), (1, 0), 1, colors.HexColor('#34495e')),  # Borde derecho
-        ('LINEAFTER', (0, 0), (0, 0), 1, colors.HexColor('#34495e')),  # Línea divisoria
-    ]))
-    
-    story.append(info_detallada_table)
-    story.append(Spacer(1, 20))
     
 else:
     # Si no hay imagen principal, mostrar información básica

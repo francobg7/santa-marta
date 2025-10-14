@@ -30,7 +30,7 @@ CONTACTO = {
     'whatsapp': '+595 981 240 099',
     'whatsapp_link': 'https://wa.me/595981240099?text=Hola%2C%20vi%20el%20campo%20en%20venta%20en%20Santa%20Marta%2C%20Boquerón',
     'maps_link': 'https://maps.google.com/?q=-23.2984734,-60.5146408',
-    'drive_link': 'https://drive.google.com/drive/folders/XXXXXXX'
+    'drive_link': 'https://drive.google.com/drive/folders/1IQy8Cjl1nAqoKcUkeSIh0thIItwWwYWq?usp=drive_link'
 }
 
 # === CONFIGURACIÓN DE IMÁGENES ===
