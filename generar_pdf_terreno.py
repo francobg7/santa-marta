@@ -1,12 +1,13 @@
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer, Table, TableStyle, PageBreak, KeepTogether
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Image, Spacer, Table, TableStyle, PageBreak, KeepTogether, Frame, PageTemplate, BaseDocTemplate
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm, mm
 from reportlab.lib import colors
-from reportlab.graphics.shapes import Drawing, Rect, String, Circle, Line
+from reportlab.graphics.shapes import Drawing, Rect, String, Circle, Line, Polygon
 from reportlab.graphics import renderPDF
 from reportlab.graphics.shapes import Group
-from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
+from reportlab.platypus.flowables import HRFlowable
 import os
 
 # === CONFIGURACIÓN ===
@@ -35,15 +36,56 @@ def crear_miniatura(ruta_imagen, ancho, alto, titulo):
     except:
         return None
 
-def crear_fondo_negro():
-    """Crear fondo negro para el PDF usando tabla"""
-    fondo_data = [[Paragraph("", ParagraphStyle(name='Fondo', fontSize=1))]]
-    fondo_table = Table(fondo_data, colWidths=[19*cm], rowHeights=[27*cm])
-    fondo_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, -1), colors.black),
-        ('BOX', (0, 0), (-1, -1), 0, colors.black),
-    ]))
-    return fondo_table
+def crear_fondo_industrial():
+    """Crear fondo industrial con gradiente y elementos geométricos"""
+    drawing = Drawing(21*cm, 29.7*cm)
+    
+    # Fondo principal
+    drawing.add(Rect(0, 0, 21*cm, 29.7*cm, fillColor=COLOR_BG_DARK, strokeColor=None))
+    
+    # Elementos geométricos industriales
+    # Líneas diagonales
+    for i in range(0, 30, 3):
+        drawing.add(Line(0, i*cm, 21*cm, (i+1)*cm, strokeColor=COLOR_METAL, strokeWidth=0.5, strokeDashArray=[5, 3]))
+    
+    # Rectángulos decorativos
+    drawing.add(Rect(1*cm, 25*cm, 3*cm, 0.5*cm, fillColor=COLOR_ACCENT, strokeColor=None))
+    drawing.add(Rect(17*cm, 2*cm, 3*cm, 0.5*cm, fillColor=COLOR_SECONDARY, strokeColor=None))
+    
+    # Círculos industriales
+    drawing.add(Circle(2*cm, 5*cm, 0.3*cm, fillColor=COLOR_METAL, strokeColor=None))
+    drawing.add(Circle(19*cm, 24*cm, 0.3*cm, fillColor=COLOR_METAL, strokeColor=None))
+    
+    return drawing
+
+def crear_barra_industrial(ancho, alto, color):
+    """Crear barra industrial decorativa"""
+    drawing = Drawing(ancho, alto)
+    drawing.add(Rect(0, 0, ancho, alto, fillColor=color, strokeColor=None))
+    # Agregar textura
+    for i in range(0, int(ancho), 2):
+        drawing.add(Line(i, 0, i, alto, strokeColor=COLOR_BG_DARK, strokeWidth=0.2))
+    return drawing
+
+def crear_icono_industrial(tipo, tamaño):
+    """Crear iconos industriales simples"""
+    drawing = Drawing(tamaño, tamaño)
+    
+    if tipo == "whatsapp":
+        # Círculo con W
+        drawing.add(Circle(tamaño/2, tamaño/2, tamaño/2-2, fillColor=COLOR_ACCENT, strokeColor=COLOR_TEXT_LIGHT, strokeWidth=2))
+        drawing.add(String(tamaño/2, tamaño/2-2, "W", textAnchor="middle", fontSize=tamaño/3, fillColor=COLOR_TEXT_LIGHT))
+    elif tipo == "maps":
+        # Cuadrado con M
+        drawing.add(Rect(2, 2, tamaño-4, tamaño-4, fillColor=COLOR_SECONDARY, strokeColor=COLOR_TEXT_LIGHT, strokeWidth=2))
+        drawing.add(String(tamaño/2, tamaño/2-2, "M", textAnchor="middle", fontSize=tamaño/3, fillColor=COLOR_TEXT_LIGHT))
+    elif tipo == "drive":
+        # Triángulo con D
+        points = [(tamaño/2, tamaño-2), (2, 2), (tamaño-2, 2)]
+        drawing.add(Polygon(points, fillColor=COLOR_PRIMARY, strokeColor=COLOR_TEXT_LIGHT, strokeWidth=2))
+        drawing.add(String(tamaño/2, tamaño/2-2, "D", textAnchor="middle", fontSize=tamaño/3, fillColor=COLOR_TEXT_LIGHT))
+    
+    return drawing
 
 def crear_galeria_carrusel():
     """Crear galería tipo carrusel con imagen principal y miniaturas"""
@@ -77,64 +119,92 @@ def crear_galeria_carrusel():
     
     return galeria
 
-# === ESTILOS SIMPLIFICADOS ===
+# === ESTILOS INDUSTRIALES MODERNOS ===
 styles = getSampleStyleSheet()
 
-# Estilos personalizados más grandes
-styles.add(ParagraphStyle(name='TituloPrincipal', fontSize=36, leading=42, alignment=1, textColor=colors.white, spaceAfter=20))
-styles.add(ParagraphStyle(name='Subtitulo', fontSize=24, leading=28, alignment=1, textColor=colors.white, spaceAfter=12))
-styles.add(ParagraphStyle(name='InfoDestacada', fontSize=20, leading=24, alignment=1, textColor=colors.white, spaceAfter=10))
-styles.add(ParagraphStyle(name='Precio', fontSize=28, leading=32, alignment=1, textColor=colors.HexColor('#f39c12'), spaceAfter=16))
-styles.add(ParagraphStyle(name='Contacto', fontSize=18, leading=22, alignment=1, textColor=colors.white, spaceAfter=8))
-styles.add(ParagraphStyle(name='Enlaces', fontSize=14, leading=18, alignment=1, textColor=colors.HexColor('#3498db'), spaceAfter=8))
+# Paleta de colores industrial
+COLOR_PRIMARY = colors.HexColor('#2c3e50')      # Azul oscuro industrial
+COLOR_SECONDARY = colors.HexColor('#e74c3c')    # Rojo industrial
+COLOR_ACCENT = colors.HexColor('#f39c12')       # Naranja industrial
+COLOR_TEXT_LIGHT = colors.HexColor('#ecf0f1')   # Blanco suave
+COLOR_TEXT_DARK = colors.HexColor('#2c3e50')    # Azul oscuro
+COLOR_BG_DARK = colors.HexColor('#1a1a1a')      # Negro industrial
+COLOR_METAL = colors.HexColor('#7f8c8d')        # Gris metal
+COLOR_STEEL = colors.HexColor('#95a5a6')        # Gris acero
+
+# Estilos tipográficos industriales
+styles.add(ParagraphStyle(name='TituloIndustrial', fontSize=48, leading=52, alignment=1, 
+                         textColor=COLOR_TEXT_LIGHT, spaceAfter=15, fontName='Helvetica-Bold'))
+styles.add(ParagraphStyle(name='SubtituloIndustrial', fontSize=28, leading=32, alignment=1, 
+                         textColor=COLOR_ACCENT, spaceAfter=10, fontName='Helvetica-Bold'))
+styles.add(ParagraphStyle(name='InfoIndustrial', fontSize=16, leading=20, alignment=1, 
+                         textColor=COLOR_TEXT_LIGHT, spaceAfter=8, fontName='Helvetica'))
+styles.add(ParagraphStyle(name='PrecioIndustrial', fontSize=32, leading=36, alignment=1, 
+                         textColor=COLOR_SECONDARY, spaceAfter=12, fontName='Helvetica-Bold'))
+styles.add(ParagraphStyle(name='ContactoIndustrial', fontSize=18, leading=22, alignment=1, 
+                         textColor=COLOR_TEXT_LIGHT, spaceAfter=6, fontName='Helvetica-Bold'))
+styles.add(ParagraphStyle(name='EnlacesIndustrial', fontSize=14, leading=18, alignment=1, 
+                         textColor=COLOR_ACCENT, spaceAfter=6, fontName='Helvetica'))
+styles.add(ParagraphStyle(name='DescripcionIndustrial', fontSize=12, leading=16, alignment=0, 
+                         textColor=COLOR_TEXT_LIGHT, spaceAfter=8, fontName='Helvetica'))
+styles.add(ParagraphStyle(name='TituloSeccion', fontSize=20, leading=24, alignment=0, 
+                         textColor=COLOR_ACCENT, spaceAfter=8, fontName='Helvetica-Bold'))
 
 story = []
 
-# === INICIO DIRECTO CON CONTENIDO ===
+# === DISEÑO INDUSTRIAL MODERNO ===
 
-# === INFORMACIÓN PRINCIPAL SOBRE FONDO ===
-# Título principal con overlay sobre la imagen
-titulo_principal = "CAMPO EN VENTA<br/><font size='24' color='#ecf0f1'>Santa Marta, Boquerón - Paraguay</font>"
+# Fondo industrial
+story.append(crear_fondo_industrial())
 
-# Información esencial del campo
-info_esencial = """
-<font size='20'><b>1.747 Has • Mixto (Agrícola + Ganadero)</b></font><br/>
-<font size='18'>Agrícolas: 191 Has • Ganaderas: 715 Has • Monte: 437 Has</font><br/>
-<font size='18'>Precipitación: 800 mm anuales</font>
-"""
-
-# Precio destacado
-precio_destacado = "CONSULTAR PRECIO<br/><font size='18'>Contactar para más información</font>"
-
-# Contacto directo
-contacto_directo = """
-<font size='18'><b>CONTACTO DIRECTO</b></font><br/>
-<font size='16'>WhatsApp: +595 981 240 099</font><br/>
-<font size='14'><b>Mauricio Granada</b></font><br/>
-<font size='14'>Disponible 24/7</font>
-"""
-
-# === CREAR OVERLAY DE INFORMACIÓN ===
-# Crear tabla con información superpuesta
-overlay_data = [
-    [Paragraph(titulo_principal, styles['TituloPrincipal'])],
-    [Spacer(1, 30)],
-    [Paragraph(info_esencial, styles['InfoDestacada'])],
-    [Spacer(1, 25)],
-    [Paragraph(precio_destacado, styles['Precio'])],
-    [Spacer(1, 30)],
-    [Paragraph(contacto_directo, styles['Contacto'])]
+# === HEADER INDUSTRIAL ===
+header_data = [
+    [Paragraph("INDUSTRIAL PROPERTY", styles['TituloIndustrial'])],
+    [Paragraph("SANTA MARTA • BOQUERÓN • PARAGUAY", styles['SubtituloIndustrial'])],
+    [Spacer(1, 20)],
+    [Paragraph("1,747 HECTÁREAS • OPERACIÓN MIXTA", styles['InfoIndustrial'])],
+    [Paragraph("AGRÍCOLA + GANADERA + DESARROLLO", styles['InfoIndustrial'])],
 ]
 
-overlay_table = Table(overlay_data, colWidths=[21*cm])
-overlay_table.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (-1, -1), colors.black),  # Fondo negro
+header_table = Table(header_data, colWidths=[21*cm])
+header_table.setStyle(TableStyle([
+    ('BACKGROUND', (0, 0), (-1, -1), COLOR_BG_DARK),
     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-    ('PADDING', (0, 0), (-1, -1), 30),
-    ('BOX', (0, 0), (-1, -1), 0, colors.black),
-    ('ROWBACKGROUNDS', (0, 0), (-1, -1), [colors.black]),
+    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+    ('PADDING', (0, 0), (-1, -1), 20),
+    ('BOX', (0, 0), (-1, -1), 0, COLOR_BG_DARK),
 ]))
+
+story.append(header_table)
+story.append(Spacer(1, 30))
+
+# === ESPECIFICACIONES TÉCNICAS ===
+especificaciones_data = [
+    [
+        Paragraph("ESPECIFICACIONES TÉCNICAS", styles['TituloSeccion']),
+        Paragraph("INVERSIÓN", styles['TituloSeccion'])
+    ],
+    [
+        Paragraph("• Superficie Total: 1,747 Has<br/>• Agrícolas: 191 Has<br/>• Ganaderas: 715 Has<br/>• Monte: 437 Has<br/>• Desarrollables: 154 Has<br/>• Excedente: 103 Has", styles['DescripcionIndustrial']),
+        Paragraph("CONSULTAR PRECIO<br/><br/>Contactar para información detallada de inversión y financiamiento", styles['PrecioIndustrial'])
+    ]
+]
+
+especificaciones_table = Table(especificaciones_data, colWidths=[10.5*cm, 10.5*cm])
+especificaciones_table.setStyle(TableStyle([
+    ('BACKGROUND', (0, 0), (0, 0), COLOR_PRIMARY),
+    ('BACKGROUND', (1, 0), (1, 0), COLOR_SECONDARY),
+    ('BACKGROUND', (0, 1), (0, 1), COLOR_BG_DARK),
+    ('BACKGROUND', (1, 1), (1, 1), COLOR_BG_DARK),
+    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+    ('PADDING', (0, 0), (-1, -1), 15),
+    ('BOX', (0, 0), (-1, -1), 2, COLOR_METAL),
+    ('LINEAFTER', (0, 0), (0, 0), 2, COLOR_METAL),
+]))
+
+story.append(especificaciones_table)
+story.append(Spacer(1, 30))
 
 # === GALERÍA DE IMÁGENES ===
 galeria = crear_galeria_carrusel()
@@ -142,11 +212,7 @@ galeria = crear_galeria_carrusel()
 # Imagen principal como fondo
 if galeria['imagen_principal']:
     story.append(galeria['imagen_principal'])
-    story.append(Spacer(1, 10))
-    
-    # Overlay de información sobre la imagen
-    story.append(overlay_table)
-    story.append(Spacer(1, 20))  # Reducir espacio antes de las miniaturas
+    story.append(Spacer(1, 20))
     
     # Miniaturas en formato 2x2
     if galeria['miniaturas']:
