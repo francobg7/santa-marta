@@ -62,6 +62,14 @@ def build_cover_pdf(path: str):
 
     story.append(table)
 
+    # Imagen adicional campo7.jpg al final de la página 1 (si existe)
+    extra_image_path = "campo7.jpg"
+    if os.path.exists(extra_image_path):
+        # Espacio pequeño para separar del bloque negro
+        story.append(Spacer(1, 6))
+        # Ajuste de tamaño para ocupar más espacio sin desbordar
+        story.append(Image(extra_image_path, width=21*cm, height=9.5*cm))
+
     doc.build(story)
 
 
@@ -82,3 +90,4 @@ if __name__ == "__main__":
     build_cover_pdf(COVER_PATH)
     merge_cover_with_existing(COVER_PATH, INPUT_TRIMMED, OUTPUT_PATH)
     print(f"✅ Portada creada y unida: {OUTPUT_PATH}")
+
