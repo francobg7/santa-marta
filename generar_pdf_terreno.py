@@ -38,23 +38,23 @@ def crear_miniatura(ruta_imagen, ancho, alto, titulo):
 
 def crear_fondo_industrial():
     """Crear fondo industrial con gradiente y elementos geométricos"""
-    drawing = Drawing(21*cm, 29.7*cm)
+    drawing = Drawing(20.4*cm, 29.0*cm)
     
     # Fondo principal
-    drawing.add(Rect(0, 0, 21*cm, 29.7*cm, fillColor=COLOR_BG_DARK, strokeColor=None))
+    drawing.add(Rect(0, 0, 20.4*cm, 29.0*cm, fillColor=COLOR_BG_DARK, strokeColor=None))
     
     # Elementos geométricos industriales
     # Líneas diagonales
-    for i in range(0, 30, 3):
-        drawing.add(Line(0, i*cm, 21*cm, (i+1)*cm, strokeColor=COLOR_METAL, strokeWidth=0.5, strokeDashArray=[5, 3]))
+    for i in range(0, 29, 3):
+        drawing.add(Line(0, i*cm, 20.4*cm, (i+1)*cm, strokeColor=COLOR_METAL, strokeWidth=0.5, strokeDashArray=[5, 3]))
     
     # Rectángulos decorativos
-    drawing.add(Rect(1*cm, 25*cm, 3*cm, 0.5*cm, fillColor=COLOR_ACCENT, strokeColor=None))
-    drawing.add(Rect(17*cm, 2*cm, 3*cm, 0.5*cm, fillColor=COLOR_SECONDARY, strokeColor=None))
+    drawing.add(Rect(1*cm, 24.5*cm, 3*cm, 0.5*cm, fillColor=COLOR_ACCENT, strokeColor=None))
+    drawing.add(Rect(16.5*cm, 2*cm, 3*cm, 0.5*cm, fillColor=COLOR_SECONDARY, strokeColor=None))
     
     # Círculos industriales
     drawing.add(Circle(2*cm, 5*cm, 0.3*cm, fillColor=COLOR_METAL, strokeColor=None))
-    drawing.add(Circle(19*cm, 24*cm, 0.3*cm, fillColor=COLOR_METAL, strokeColor=None))
+    drawing.add(Circle(18.7*cm, 23.5*cm, 0.3*cm, fillColor=COLOR_METAL, strokeColor=None))
     
     return drawing
 
@@ -155,6 +155,7 @@ story = []
 # === DISEÑO INDUSTRIAL MODERNO ===
 
 # Fondo industrial
+# Fondo industrial (tamaño seguro para el frame)
 story.append(crear_fondo_industrial())
 
 # === HEADER INDUSTRIAL ===
@@ -311,7 +312,8 @@ if galeria['imagen_principal']:
     <font color='#ecf0f1' size='18'><b>GALERÍA COMPLETA EN GOOGLE DRIVE</b></font><br/>
     <font color='#7f8c8d' size='16'>Accede a todas las fotos del campo en alta resolución</font>
     """
-    story.append(Paragraph(drive_info, styles['Enlaces']))
+    # Usar estilo existente en este archivo para evitar KeyError
+    story.append(Paragraph(drive_info, styles['EnlacesIndustrial']))
     story.append(Spacer(1, 30))
     
     # === INFORMACIÓN DETALLADA EN DOS COLUMNAS ===
