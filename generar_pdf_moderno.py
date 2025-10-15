@@ -9,24 +9,27 @@ from reportlab.graphics.shapes import Group
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
 from reportlab.platypus.flowables import HRFlowable
 import os
+from urllib.parse import quote
 
 # === CONFIGURACIÓN ===
 pdf_name = "campo_santa_marta_moderno.pdf"
 doc = SimpleDocTemplate(pdf_name, pagesize=A4, 
                        rightMargin=0, leftMargin=0, topMargin=0, bottomMargin=0)
 
-# === PALETA DE COLORES MODERNA ===
-COLOR_PRIMARY = colors.HexColor('#2c3e50')      # Azul oscuro elegante
-COLOR_SECONDARY = colors.HexColor('#3498db')    # Azul moderno
-COLOR_ACCENT = colors.HexColor('#e74c3c')       # Rojo vibrante
-COLOR_SUCCESS = colors.HexColor('#27ae60')      # Verde éxito
-COLOR_WARNING = colors.HexColor('#f39c12')      # Naranja llamativo
-COLOR_TEXT_LIGHT = colors.HexColor('#ecf0f1')   # Blanco suave
-COLOR_TEXT_DARK = colors.HexColor('#2c3e50')    # Azul oscuro
-COLOR_BG_LIGHT = colors.HexColor('#f8f9fa')     # Gris muy claro
-COLOR_BG_DARK = colors.HexColor('#1a1a1a')      # Negro elegante
-COLOR_METAL = colors.HexColor('#95a5a6')        # Gris metal
-COLOR_GRADIENT = colors.HexColor('#34495e')     # Gris azulado
+# === PALETA DE COLORES MONOCROMÁTICA (NEGRO/BLANCO) ===
+COLOR_PRIMARY = colors.black
+COLOR_SECONDARY = colors.black
+COLOR_ACCENT = colors.black
+COLOR_SUCCESS = colors.black
+COLOR_WARNING = colors.black
+COLOR_TEXT_LIGHT = colors.white
+COLOR_TEXT_DARK = colors.black
+COLOR_BG_LIGHT = colors.black
+COLOR_BG_DARK = colors.black
+COLOR_METAL = colors.white
+COLOR_GRADIENT = colors.black
+# Acento para el hero (contraste)
+COLOR_HERO = colors.HexColor('#f39c12')
 
 # === FUNCIONES DE DISEÑO MODERNO ===
 def crear_icono_moderno(tipo, tamaño, color):
@@ -55,21 +58,21 @@ styles = getSampleStyleSheet()
 
 # Estilos tipográficos modernos
 styles.add(ParagraphStyle(name='TituloModerno', fontSize=48, leading=52, alignment=1, 
-                         textColor=COLOR_TEXT_LIGHT, spaceAfter=20, fontName='Helvetica-Bold'))
+                         textColor=COLOR_HERO, spaceAfter=20, fontName='Helvetica-Bold'))
 styles.add(ParagraphStyle(name='SubtituloModerno', fontSize=28, leading=32, alignment=1, 
-                         textColor=COLOR_WARNING, spaceAfter=15, fontName='Helvetica-Bold'))
+                         textColor=COLOR_HERO, spaceAfter=15, fontName='Helvetica-Bold'))
 styles.add(ParagraphStyle(name='InfoModerno', fontSize=18, leading=22, alignment=1, 
-                         textColor=COLOR_TEXT_LIGHT, spaceAfter=10, fontName='Helvetica'))
+                         textColor=COLOR_HERO, spaceAfter=10, fontName='Helvetica'))
 styles.add(ParagraphStyle(name='PrecioModerno', fontSize=32, leading=36, alignment=1, 
-                         textColor=COLOR_ACCENT, spaceAfter=15, fontName='Helvetica-Bold'))
+                         textColor=COLOR_TEXT_LIGHT, spaceAfter=15, fontName='Helvetica-Bold'))
 styles.add(ParagraphStyle(name='ContactoModerno', fontSize=20, leading=24, alignment=1, 
                          textColor=COLOR_TEXT_LIGHT, spaceAfter=8, fontName='Helvetica-Bold'))
 styles.add(ParagraphStyle(name='EnlacesModerno', fontSize=16, leading=20, alignment=1, 
-                         textColor=COLOR_WARNING, spaceAfter=8, fontName='Helvetica'))
+                         textColor=COLOR_TEXT_LIGHT, spaceAfter=8, fontName='Helvetica'))
 styles.add(ParagraphStyle(name='DescripcionModerno', fontSize=14, leading=18, alignment=0, 
                          textColor=COLOR_TEXT_LIGHT, spaceAfter=10, fontName='Helvetica'))
 styles.add(ParagraphStyle(name='TituloSeccion', fontSize=22, leading=26, alignment=0, 
-                         textColor=COLOR_WARNING, spaceAfter=10, fontName='Helvetica-Bold'))
+                         textColor=COLOR_TEXT_LIGHT, spaceAfter=10, fontName='Helvetica-Bold'))
 
 # === FUNCIONES DE IMÁGENES ===
 def crear_imagen_principal(ruta_imagen, ancho, alto):
@@ -136,7 +139,7 @@ header_data = [
 
 header_table = Table(header_data, colWidths=[21*cm])
 header_table.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (-1, -1), COLOR_GRADIENT),
+    ('BACKGROUND', (0, 0), (-1, -1), COLOR_BG_DARK),
     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
     ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
     ('PADDING', (0, 0), (-1, -1), 30),
@@ -155,14 +158,14 @@ info_cards_data = [
     ],
     [
         Paragraph("• Superficie Total: 1,747 Has<br/>• Agrícolas: 191 Has<br/>• Ganaderas: 715 Has<br/>• Monte: 437 Has<br/>• Desarrollables: 154 Has<br/>• Excedente: 103 Has<br/>• Precipitación: 800 mm anuales", styles['DescripcionModerno']),
-        Paragraph("CONSULTAR PRECIO<br/><br/>Contactar para información detallada de inversión y financiamiento<br/><br/>Disponible 24/7", styles['PrecioModerno'])
+        Paragraph("CONSULTAR PRECIO<br/><br/>Contactar para información detallada de inversión y financiamiento", styles['PrecioModerno'])
     ]
 ]
 
 info_cards_table = Table(info_cards_data, colWidths=[10.5*cm, 10.5*cm])
 info_cards_table.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (0, 0), COLOR_PRIMARY),
-    ('BACKGROUND', (1, 0), (1, 0), COLOR_ACCENT),
+    ('BACKGROUND', (0, 0), (0, 0), COLOR_BG_DARK),
+    ('BACKGROUND', (1, 0), (1, 0), COLOR_BG_DARK),
     ('BACKGROUND', (0, 1), (0, 1), COLOR_BG_DARK),
     ('BACKGROUND', (1, 1), (1, 1), COLOR_BG_DARK),
     ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
@@ -214,7 +217,9 @@ if galeria['imagen_principal']:
         story.append(Spacer(1, 30))
 
 # === TARJETAS DE CONTACTO ===
-whatsapp_link = "https://wa.me/595981240099?text=Hola%2C%20vi%20el%20campo%20en%20venta%20en%20Santa%20Marta%2C%20Boquerón"
+# Mensaje predeterminado de WhatsApp (codificado)
+mensaje = "Hola, vi el campo en venta en Santa Marta, Boquerón"
+whatsapp_link = f"https://wa.me/595981240099?text={quote(mensaje)}"
 maps_link = "https://maps.google.com/?q=-23.2984734,-60.5146408"
 drive_link = "https://drive.google.com/drive/folders/1IQy8Cjl1nAqoKcUkeSIh0thIItwWwYWq?usp=drive_link"
 
@@ -225,20 +230,20 @@ contacto_cards_data = [
         Paragraph("+595 981 240 099", styles['ContactoModerno'])
     ],
     [
-        Paragraph(f"<a href='{whatsapp_link}' color='#27ae60'><b>💬 WHATSAPP</b><br/><u>+595 981 240 099</u></a>", 
-                 ParagraphStyle(name='EnlacesModerno', fontSize=18, leading=22, alignment=1, textColor=COLOR_SUCCESS)),
-        Paragraph(f"<a href='{maps_link}' color='#e74c3c'><b>📍 UBICACIÓN</b><br/><u>Ver en Maps</u></a>", 
-                 ParagraphStyle(name='EnlacesModerno', fontSize=18, leading=22, alignment=1, textColor=COLOR_ACCENT)),
-        Paragraph(f"<a href='{drive_link}' color='#3498db'><b>📁 GALERÍA</b><br/><u>Ver Fotos</u></a>", 
-                 ParagraphStyle(name='EnlacesModerno', fontSize=18, leading=22, alignment=1, textColor=COLOR_SECONDARY))
+        Paragraph(f"<a href='{whatsapp_link}' color='white'><b>💬 WHATSAPP</b><br/><u>+595 981 240 099</u></a>", 
+                 ParagraphStyle(name='EnlacesModerno', fontSize=18, leading=22, alignment=1, textColor=COLOR_TEXT_LIGHT)),
+        Paragraph(f"<a href='{maps_link}' color='white'><b>📍 UBICACIÓN</b><br/><u>Ver en Maps</u></a>", 
+                 ParagraphStyle(name='EnlacesModerno', fontSize=18, leading=22, alignment=1, textColor=COLOR_TEXT_LIGHT)),
+        Paragraph(f"<a href='{drive_link}' color='white'><b>📁 GALERÍA</b><br/><u>Ver Fotos</u></a>", 
+                 ParagraphStyle(name='EnlacesModerno', fontSize=18, leading=22, alignment=1, textColor=COLOR_TEXT_LIGHT))
     ]
 ]
 
 contacto_cards_table = Table(contacto_cards_data, colWidths=[7*cm, 7*cm, 7*cm])
 contacto_cards_table.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (0, 0), COLOR_SUCCESS),
-    ('BACKGROUND', (1, 0), (1, 0), COLOR_ACCENT),
-    ('BACKGROUND', (2, 0), (2, 0), COLOR_SECONDARY),
+    ('BACKGROUND', (0, 0), (0, 0), COLOR_BG_DARK),
+    ('BACKGROUND', (1, 0), (1, 0), COLOR_BG_DARK),
+    ('BACKGROUND', (2, 0), (2, 0), COLOR_BG_DARK),
     ('BACKGROUND', (0, 1), (0, 1), COLOR_BG_DARK),
     ('BACKGROUND', (1, 1), (1, 1), COLOR_BG_DARK),
     ('BACKGROUND', (2, 1), (2, 1), COLOR_BG_DARK),
@@ -266,8 +271,8 @@ info_detallada_data = [
 
 info_detallada_table = Table(info_detallada_data, colWidths=[10.5*cm, 10.5*cm])
 info_detallada_table.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (0, 0), COLOR_WARNING),
-    ('BACKGROUND', (1, 0), (1, 0), COLOR_SECONDARY),
+    ('BACKGROUND', (0, 0), (0, 0), COLOR_BG_DARK),
+    ('BACKGROUND', (1, 0), (1, 0), COLOR_BG_DARK),
     ('BACKGROUND', (0, 1), (0, 1), COLOR_BG_DARK),
     ('BACKGROUND', (1, 1), (1, 1), COLOR_BG_DARK),
     ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
@@ -289,7 +294,7 @@ puntos_interes_data = [
 
 puntos_interes_table = Table(puntos_interes_data, colWidths=[21*cm])
 puntos_interes_table.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (0, 0), COLOR_PRIMARY),
+    ('BACKGROUND', (0, 0), (0, 0), COLOR_BG_DARK),
     ('BACKGROUND', (0, 1), (0, 1), COLOR_BG_DARK),
     ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
     ('VALIGN', (0, 0), (-1, -1), 'TOP'),

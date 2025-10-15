@@ -97,7 +97,6 @@ precio_destacado = "CONSULTAR PRECIO<br/><font size='12'>Contactar para más inf
 contacto_directo = """
 <font size='12'><b>CONTACTO DIRECTO</b></font><br/>
 <font size='11'>WhatsApp: +595 981 240 099</font><br/>
-<font size='10'>Disponible 24/7</font>
 """
 
 # === CREAR OVERLAY DE INFORMACIÓN ===

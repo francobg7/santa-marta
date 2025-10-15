@@ -149,7 +149,7 @@ especificaciones_data = [
     ],
     [
         Paragraph("• Superficie Total: 1,747 Has<br/>• Agrícolas: 191 Has<br/>• Ganaderas: 715 Has<br/>• Monte: 437 Has<br/>• Desarrollables: 154 Has<br/>• Excedente: 103 Has<br/>• Precipitación: 800 mm anuales", styles['DescripcionIndustrial']),
-        Paragraph("CONSULTAR PRECIO<br/><br/>Contactar para información detallada de inversión y financiamiento<br/><br/>Disponible 24/7", styles['PrecioIndustrial'])
+        Paragraph("CONSULTAR PRECIO<br/><br/>Contactar para información detallada de inversión y financiamiento", styles['PrecioIndustrial'])
     ]
 ]
 
