@@ -1,156 +1,157 @@
-# 🏡 SANTA-MARTA - Generador de PDFs Profesionales para Campos
+# 🏡 SANTA-MARTA – Professional PDF Generator for Farmland Listings
 
-Este proyecto genera PDFs profesionales para la venta de campos con información detallada, galería fotográfica y enlaces de contacto directo a Google Drive.
+This project generates **professional PDFs** for farmland sales with detailed information, a photo gallery, and direct contact links to Google Drive.
 
-## ✨ Características Principales
+## ✨ Main Features
 
-- **🎨 Diseño profesional** con iconos y colores corporativos
-- **📸 Galería fotográfica** con soporte para múltiples imágenes
-- **🔗 Enlaces directos** a WhatsApp, Google Maps y Google Drive
-- **📊 Información detallada** del campo con datos específicos
-- **🏢 Nav bar corporativa** con identidad de marca
-- **📱 Responsive** y optimizado para impresión A4
+- **🎨 Professional design** with icons and corporate colors  
+- **📸 Photo gallery** with support for multiple images  
+- **🔗 Direct links** to WhatsApp, Google Maps, and Google Drive  
+- **📊 Detailed property information** with specific data  
+- **🏢 Corporate navigation bar** with brand identity  
+- **📱 Responsive** and optimized for A4 printing  
 
-## 🚀 Requisitos
+## 🚀 Requirements
 
-- Python 3.13+
-- reportlab (ya instalado en el entorno virtual)
-- Imágenes del campo (opcional)
+- Python 3.13+  
+- `reportlab` (already included in the virtual environment)  
+- Farmland images (optional)
 
-## 📦 Instalación
+## 📦 Installation
 
-1. **Activar el entorno virtual:**
+1. **Activate the virtual environment:**
 ```bash
 source venv/bin/activate
 ```
 
-2. **Instalar dependencias (si es necesario):**
+2. **Install dependencies (if needed):**
 ```bash
 pip install reportlab
 ```
 
-## 🎯 Uso Rápido
+## 🎯 Quick Start
 
-1. **Activar el entorno virtual:**
+1. **Activate the virtual environment:**
 ```bash
 source venv/bin/activate
 ```
 
-2. **Generar el PDF:**
+2. **Generate the PDF:**
 ```bash
 python generar_pdf_terreno.py
 ```
 
-3. **El PDF se generará como `campo_santa_marta.pdf`**
+3. **The PDF will be generated as `campo_santa_marta.pdf`**
 
-## 📸 Galería Tipo Carrusel
+## 📸 Carousel-Style Gallery
 
-### Estructura de la Galería
-- **1 imagen principal grande** (12x8 cm) en la parte superior
-- **4 miniaturas pequeñas** (3x2 cm cada una) en la parte inferior
-- **Títulos descriptivos** para cada miniatura
+### Gallery Structure
+- **1 large main image** (12x8 cm) at the top  
+- **4 small thumbnails** (3x2 cm each) below  
+- **Descriptive titles** for each thumbnail  
 
-### Nombres de Archivos
-- `campo1.jpg` - **Imagen principal** (Vista general del campo)
-- `campo2.jpg` - **Pasturas** (Gatton Panic)
-- `campo3.jpg` - **Agrícola** (191 Has)
-- `campo4.jpg` - **Monte** (437 Has)
-- `campo5.jpg` - **Panorámica** (Vista aérea)
+### File Names
+- `campo1.jpg` – **Main image** (General view of the property)  
+- `campo2.jpg` – **Pastures** (Gatton Panic)  
+- `campo3.jpg` – **Agricultural area** (191 Has)  
+- `campo4.jpg` – **Forest area** (437 Has)  
+- `campo5.jpg` – **Panoramic view** (Aerial view)
 
-### Generar Imágenes de Ejemplo
+### Generate Example Images
 ```bash
-# Imágenes básicas
+# Basic images
 python crear_imagenes_ejemplo.py
 
-# Imágenes específicas para carrusel
+# Carousel-specific images
 python crear_imagenes_carrusel.py
 ```
 
-## 🔗 Integración con Google Drive
+## 🔗 Google Drive Integration
 
-### Configurar Enlaces
-1. Suba las fotos a una carpeta en Google Drive
-2. Comparta con acceso público
-3. Copie el ID de la carpeta
-4. Reemplace `XXXXXXX` en el código con el ID real
+### Set Up Links
+1. Upload the photos to a Google Drive folder  
+2. Share the folder publicly  
+3. Copy the folder ID  
+4. Replace `XXXXXXX` in the code with the actual ID  
 
-### Enlaces Automáticos
-- **WhatsApp:** Contacto directo con mensaje predefinido
-- **Google Maps:** Ubicación exacta del campo
-- **Google Drive:** Galería completa de fotos
+### Automatic Links
+- **WhatsApp:** Direct contact with predefined message  
+- **Google Maps:** Exact field location  
+- **Google Drive:** Complete photo gallery  
 
-## 📋 Información del Campo
+## 📋 Field Information
 
-El PDF incluye automáticamente:
-- **📍 Ubicación:** Santa Marta, Boquerón, Paraguay
-- **🌱 Aptitud:** Mixto (Agrícola + Ganadero)
-- **🌧️ Precipitación:** 800 mm anuales
-- **📏 Superficie:** 1.747 Has totales
-- **🌾 Desglose:** Agrícolas (191 Has), Ganaderas (715 Has), Monte (437 Has)
-- **🗺️ Puntos de interés:** Distancias a ciudades importantes
+The PDF automatically includes:
+- **📍 Location:** Santa Marta, Boquerón, Paraguay  
+- **🌱 Land Use:** Mixed (Agricultural + Livestock)  
+- **🌧️ Rainfall:** 800 mm per year  
+- **📏 Total Area:** 1,747 hectares  
+- **🌾 Breakdown:** Agricultural (191 Ha), Livestock (715 Ha), Forest (437 Ha)  
+- **🗺️ Points of Interest:** Distances to major cities  
 
-## 🎨 Personalización
+## 🎨 Customization
 
-### Modificar Información
-Edite las variables en `generar_pdf_terreno.py`:
-- `info_campo` - Información del campo
-- `puntos_interes` - Puntos de interés
-- `whatsapp_link` - Enlace de WhatsApp
-- `maps_link` - Enlace de Google Maps
-- `drive_link` - Enlace de Google Drive
+### Modify Information
+Edit the variables in `generar_pdf_terreno.py`:
+- `info_campo` – Field information  
+- `puntos_interes` – Points of interest  
+- `whatsapp_link` – WhatsApp contact link  
+- `maps_link` – Google Maps link  
+- `drive_link` – Google Drive link  
 
-### Cambiar Estilos
-Use los estilos en `navbar_estilos.py`:
-1. **Corporativo Clásico** - Azul oscuro
-2. **Moderno con Gradiente** - Azul claro
-3. **Minimalista** - Gris claro
-4. **Elegante con Sombra** - Morado
+### Change Styles
+Use the styles from `navbar_estilos.py`:
+1. **Classic Corporate** – Dark blue  
+2. **Modern Gradient** – Light blue  
+3. **Minimalist** – Light gray  
+4. **Elegant with Shadow** – Purple  
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 SANTA-MARTA/
-├── generar_pdf_terreno.py        # Script principal
-├── navbar_estilos.py             # Estilos de nav bar
-├── crear_imagenes_ejemplo.py     # Generador de imágenes básicas
-├── crear_imagenes_carrusel.py    # Generador de imágenes para carrusel
-├── INSTRUCCIONES_IMAGENES.md     # Guía de imágenes
-├── INSTRUCCIONES_CARRUSEL.md     # Guía específica del carrusel
-├── README.md                     # Este archivo
-├── venv/                         # Entorno virtual
-├── campo_santa_marta.pdf         # PDF generado
-└── campo1-5.pdf                  # Imágenes de ejemplo
+├── generar_pdf_terreno.py        # Main script
+├── navbar_estilos.py             # Nav bar styles
+├── crear_imagenes_ejemplo.py     # Basic image generator
+├── crear_imagenes_carrusel.py    # Carousel image generator
+├── INSTRUCCIONES_IMAGENES.md     # Image guide
+├── INSTRUCCIONES_CARRUSEL.md     # Carousel-specific guide
+├── README.md                     # This file
+├── venv/                         # Virtual environment
+├── campo_santa_marta.pdf         # Generated PDF
+└── campo1-5.jpg                  # Example images
 ```
 
-## 🔧 Archivos de Configuración
+## 🔧 Configuration Files
 
-- **`generar_pdf_terreno.py`** - Script principal con toda la lógica
-- **`navbar_estilos.py`** - 4 estilos diferentes de nav bar
-- **`crear_imagenes_ejemplo.py`** - Genera imágenes de prueba
-- **`INSTRUCCIONES_IMAGENES.md`** - Guía completa para imágenes
+- **`generar_pdf_terreno.py`** – Main script with full logic  
+- **`navbar_estilos.py`** – Four different nav bar styles  
+- **`crear_imagenes_ejemplo.py`** – Generates test images  
+- **`INSTRUCCIONES_IMAGENES.md`** – Complete image guide  
 
-## 📱 Características Técnicas
+## 📱 Technical Details
 
-- **Formato:** PDF A4 optimizado
-- **Imágenes:** JPG, PNG, GIF soportados
-- **Enlaces:** Clicables en el PDF
-- **Iconos:** Emojis integrados
-- **Colores:** Paleta corporativa profesional
-- **Tipografía:** Helvetica con múltiples pesos
+- **Format:** Optimized A4 PDF  
+- **Images:** Supports JPG, PNG, GIF  
+- **Links:** Clickable inside the PDF  
+- **Icons:** Built-in emojis  
+- **Colors:** Professional corporate palette  
+- **Font:** Helvetica (multiple weights)  
 
-## 🎯 Casos de Uso
+## 🎯 Use Cases
 
-- **Inmobiliarias** - Presentación de campos
-- **Agentes inmobiliarios** - Material de marketing
-- **Propietarios** - Venta directa de campos
-- **Inversionistas** - Análisis de propiedades
+- **Real Estate Agencies** – Field presentation materials  
+- **Agents** – Marketing and client brochures  
+- **Landowners** – Direct property sales  
+- **Investors** – Property analysis  
 
-## 📞 Soporte
+## 📞 Support
 
-Para personalizaciones adicionales o dudas:
-- Revisar `INSTRUCCIONES_IMAGENES.md`
-- Modificar variables en el código principal
-- Usar estilos predefinidos en `navbar_estilos.py`
+For further customization or assistance:
+- Review `INSTRUCCIONES_IMAGENES.md`  
+- Modify variables in the main code  
+- Use predefined styles in `navbar_estilos.py`
 
-¡El PDF está listo para usar con Google Drive y contacto directo! 🚀
+The PDF is ready to use with Google Drive and direct contact links! 🚀  
+
 # santa-marta
