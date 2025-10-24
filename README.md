@@ -1,4 +1,4 @@
-# 🏡 SANTA-MARTA – Professional PDF Generator for Farmland Listings
+# 🏡 SANTA-MARTA – Professional PDF Generator
 
 This project generates **professional PDFs** for farmland sales with detailed information, a photo gallery, and direct contact links to Google Drive.
 
